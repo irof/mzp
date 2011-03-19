@@ -1,6 +1,7 @@
 package tddbc;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
@@ -19,6 +20,13 @@ public class TweetCategorizerTest {
 		TweetCategorizer tc = new TweetCategorizer();
 		String result = tc.categorize("hoge¥tfuga #tag");
 		assertThat(result, is("HashTag¥tfuga #tag"));
+	}
+
+	@Test
+	public void ハッシュタグじゃない() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer();
+		String result = tc.categorize("hoge¥tfuga #");
+		assertThat(result, is("Normal¥tfuga #"));
 	}
 	
 	@Test

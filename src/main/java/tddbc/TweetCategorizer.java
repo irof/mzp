@@ -54,7 +54,7 @@ public class TweetCategorizer {
 		HashTag {
 			@Override
 			boolean match(String content) {
-				return content.contains("#");
+				return content.matches(".+#.+");
 			}
 		},
 		;
