@@ -9,7 +9,7 @@ public class TweetCategorizer {
 
 	public String categorize(String tweet) {
 		int idx = tweet.indexOf(TAB);
-		String content = tweet.substring(idx + 2);
+		String content = tweet.substring(idx + TAB.length());
 
 		TweetBuilder tb = new TweetBuilder();
 		for (Category cat : Category.values()) {
