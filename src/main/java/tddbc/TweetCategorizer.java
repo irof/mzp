@@ -12,15 +12,16 @@ public class TweetCategorizer {
 		String content = tweet.substring(idx + 2);
 
 		TweetBuilder tb = new TweetBuilder();
-		if (isReply(content)) tb.append(Category.Reply);
-		if (isHashTag(content)) tb.append(Category.HashTag);
-		if (isMention(content)) tb.append(Category.Mention);
+		for (Category cat : Category.values()) {
+			if (cat.match(content)) tb.append(cat);
+		}
 
 		return tb.asString(content);
 	}
 
 	class TweetBuilder {
 		List<Category> list = new ArrayList<Category>();
+
 		void append(Category cat) {
 			list.add(cat);
 		}
@@ -37,20 +38,29 @@ public class TweetCategorizer {
 
 	}
 
-	private boolean isMention(String content) {
-		return content.matches(".+@.+");
-	}
-
-	private boolean isReply(String content) {
-		return content.startsWith("@");
-	}
-
-	private boolean isHashTag(String content) {
-		return content.contains("#");
-	}
-
 	enum Category {
-		Normal, HashTag, Reply, Mention;
+		Normal, Reply {
+			@Override
+			boolean match(String content) {
+				return content.startsWith("@");
+			}
+		},
+		Mention {
+			@Override
+			boolean match(String content) {
+				return content.matches(".+@.+");
+			}
+		},
+		HashTag {
+			@Override
+			boolean match(String content) {
+				return content.contains("#");
+			}
+		},
+		;
+		boolean match(String content) {
+			return false;
+		}
 	}
 
 }
