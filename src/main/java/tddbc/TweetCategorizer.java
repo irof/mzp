@@ -1,5 +1,8 @@
 package tddbc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TweetCategorizer {
 
 	private static final String TAB = "¥t";
@@ -9,7 +12,6 @@ public class TweetCategorizer {
 		String content = tweet.substring(idx + 2);
 
 		TweetBuilder tb = new TweetBuilder();
-		
 		if (isReply(content)) tb.append(Category.Reply);
 		if (isHashTag(content)) tb.append(Category.HashTag);
 		if (isMention(content)) tb.append(Category.Mention);
@@ -18,22 +20,23 @@ public class TweetCategorizer {
 	}
 
 	class TweetBuilder {
-		StringBuilder sb = new StringBuilder();
-		
+		List<Category> list = new ArrayList<Category>();
 		void append(Category cat) {
-			if (sb.length() != 0) sb.append(",");
-			sb.append(cat);
+			list.add(cat);
 		}
-		
+
 		String asString(String content) {
-			if(sb.length() == 0){
-				sb.append(Category.Normal);
+			StringBuilder sb = new StringBuilder();
+			for (Category cat : list) {
+				if (sb.length() != 0) sb.append(",");
+				sb.append(cat);
 			}
+			if (sb.length() == 0) sb.append(Category.Normal);
 			return sb.append(TAB).append(content).toString();
 		}
 
 	}
-	
+
 	private boolean isMention(String content) {
 		return content.matches(".+@.+");
 	}
@@ -41,12 +44,12 @@ public class TweetCategorizer {
 	private boolean isReply(String content) {
 		return content.startsWith("@");
 	}
-	
-	private boolean isHashTag(String content){
-		return content.contains("#"); 
+
+	private boolean isHashTag(String content) {
+		return content.contains("#");
 	}
-	
-	enum Category{
+
+	enum Category {
 		Normal, HashTag, Reply, Mention;
 	}
 
