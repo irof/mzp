@@ -42,19 +42,19 @@ public class TweetCategorizer {
 		Normal, Reply {
 			@Override
 			boolean match(String content) {
-				return content.startsWith("@");
+				return content.matches("@\\w+.*");
 			}
 		},
 		Mention {
 			@Override
 			boolean match(String content) {
-				return content.matches(".+@.+");
+				return content.matches(".+@\\w+.*");
 			}
 		},
 		HashTag {
 			@Override
 			boolean match(String content) {
-				return content.matches(".+#.+");
+				return content.matches(".*#\\w+.*");
 			}
 		},
 		;

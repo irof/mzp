@@ -12,28 +12,48 @@ public class TweetCategorizerTest {
 	public void 通常のTweetを受け取る() throws Exception {
 		TweetCategorizer tc = new TweetCategorizer();
 		String result = tc.categorize("bleis¥tあいうえお");
-		assertThat(result , is("Normal¥tあいうえお"));
+		assertThat(result, is("Normal¥tあいうえお"));
 	}
-	
+
 	@Test
-	public void ハッシュタグを含むTweetを受け取る() throws Exception {
+	public void ハッシュタグ1() throws Exception {
 		TweetCategorizer tc = new TweetCategorizer();
 		String result = tc.categorize("hoge¥tfuga #tag");
 		assertThat(result, is("HashTag¥tfuga #tag"));
 	}
+	@Test
+	public void ハッシュタグ2() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer();
+		String result = tc.categorize("hoge¥t#hogehoge fuga");
+		assertThat(result, is("HashTag¥t#hogehoge fuga"));
+	}
 
 	@Test
-	public void ハッシュタグじゃない() throws Exception {
+	public void ハッシュタグじゃない1() throws Exception {
 		TweetCategorizer tc = new TweetCategorizer();
 		String result = tc.categorize("hoge¥tfuga #");
 		assertThat(result, is("Normal¥tfuga #"));
 	}
-	
+
+	@Test
+	public void ハッシュタグじゃない2() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer();
+		String result = tc.categorize("hoge¥tfuga # ");
+		assertThat(result, is("Normal¥tfuga # "));
+	}
+
 	@Test
 	public void replyを含むTweetの時は先頭にReplyをつける() throws Exception {
 		TweetCategorizer tc = new TweetCategorizer();
-		String result = tc.categorize("bleis¥t@irof hogehoge");
-		assertThat(result, is("Reply¥t@irof hogehoge"));
+		String result = tc.categorize("bleis¥t@tan_go238 hogehoge");
+		assertThat(result, is("Reply¥t@tan_go238 hogehoge"));
+	}
+
+	@Test
+	public void Replyじゃない() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer();
+		String result = tc.categorize("bleis¥t@ irof hogehoge");
+		assertThat(result, is("Normal¥t@ irof hogehoge"));
 	}
 
 	@Test
@@ -44,9 +64,17 @@ public class TweetCategorizerTest {
 	}
 	
 	@Test
+	public void Mentionじゃない() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer();
+		String result = tc.categorize("tango¥tpiyo @!irof");
+		assertThat(result, is("Normal¥tpiyo @!irof"));
+	}
+
+	@Test
 	public void HashTagとReplyを含むTweetの時は先頭に両方をカンマ区切りにつなげる() throws Exception {
 		TweetCategorizer tc = new TweetCategorizer();
-		String result = tc.categorize("backpaper0¥t@tan_go238 ちょwww発表者しっかり！ #tddbc");
+		String result = tc
+				.categorize("backpaper0¥t@tan_go238 ちょwww発表者しっかり！ #tddbc");
 		assertThat(result, is("Reply,HashTag¥t@tan_go238 ちょwww発表者しっかり！ #tddbc"));
 	}
 }
