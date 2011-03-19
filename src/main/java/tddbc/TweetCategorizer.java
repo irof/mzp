@@ -27,12 +27,13 @@ public class TweetCategorizer {
 		}
 
 		String asString(String content) {
+			if (list.isEmpty()) list.add(Category.Normal);
+
 			StringBuilder sb = new StringBuilder();
 			for (Category cat : list) {
 				if (sb.length() != 0) sb.append(",");
 				sb.append(cat);
 			}
-			if (sb.length() == 0) sb.append(Category.Normal);
 			return sb.append(TAB).append(content).toString();
 		}
 
