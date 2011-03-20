@@ -7,6 +7,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLConnection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,4 +97,14 @@ public class TweetCategorizer {
 		return list;
 	}
 
+	protected Tweet convert(String tweet) throws ParseException {
+		Tweet t = new Tweet();
+
+		int idx = tweet.indexOf(TAB);
+		t.postedTime = new SimpleDateFormat("yyyy/MM/dd").parse(tweet.substring(0, idx));
+		int idx2 = tweet.indexOf(TAB, idx + 1);
+		t.screenName = tweet.substring(idx + TAB.length(), idx2);
+		t.content = tweet.substring(idx2 + TAB.length());
+		return t;
+	}
 }

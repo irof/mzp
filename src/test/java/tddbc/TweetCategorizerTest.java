@@ -5,9 +5,14 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
 
 import java.net.HttpURLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Test;
+import org.junit.internal.matchers.TypeSafeMatcher;
 
 public class TweetCategorizerTest {
 
@@ -95,4 +100,40 @@ public class TweetCategorizerTest {
 		String result = tc.categorize("2011/03/20 13:14:22¥tbackpaper0¥tあいうえお RT @abc かきくけこ");
 		assertThat(result, is("Mention,UnofficialRT¥tあいうえお RT @abc かきくけこ"));
 	}
+	
+	@Test
+	public void ツイートをBeanにする() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer();
+		String tweet = "2011/03/20 13:14:22¥tbackpaper0¥tあいうえお RT @abc かきくけこ";
+		Tweet result = tc.convert(tweet);
+		assertThat(result, is(instanceOf(Tweet.class)));
+		assertThat(result.postedTime, is(DateOf.dateOf("2011/03/20")));
+		assertThat(result.screenName, is("backpaper0"));
+		assertThat(result.content, is("あいうえお RT @abc かきくけこ"));
+	}
+
+
+	static class DateOf extends TypeSafeMatcher<Date> {
+
+		String expected;
+		public DateOf(String expected) {
+			this.expected = expected;
+		}
+
+		@Override
+		public void describeTo(Description description) {
+			description.appendValue(expected);
+			
+		}
+
+		@Override
+		public boolean matchesSafely(Date item) {
+			return new SimpleDateFormat("yyyy/MM/dd").format(item).equals(expected);
+		}
+
+		public static Matcher<Date> dateOf(String expected) {
+			return new DateOf(expected);
+		}
+	}
+	
 }
