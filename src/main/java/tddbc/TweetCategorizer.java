@@ -66,6 +66,12 @@ public class TweetCategorizer {
 				return content.matches(".*#\\w+.*");
 			}
 		},
+		UnofficialRT {
+			@Override
+			boolean match(String content) {
+				return content.matches("(.+ |^)(RT|QT|MT) .+");
+			}
+		}
 		;
 		boolean match(String content) {
 			return false;

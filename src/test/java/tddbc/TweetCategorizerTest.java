@@ -88,4 +88,11 @@ public class TweetCategorizerTest {
 		assertThat(list, is(notNullValue()));
 		assertThat(list.size(), is(20));
 	}
+
+	@Test
+	public void 非公式RT_RT() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer();
+		String result = tc.categorize("2011/03/20 13:14:22¥tbackpaper0¥tあいうえお RT @abc かきくけこ");
+		assertThat(result, is("Mention,UnofficialRT¥tあいうえお RT @abc かきくけこ"));
+	}
 }
