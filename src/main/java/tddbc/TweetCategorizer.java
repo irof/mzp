@@ -119,13 +119,20 @@ public class TweetCategorizer {
 	 * @throws MalformedURLException 
 	 */
 	public List<Tweet> getLastTimeLine(int min) throws MalformedURLException, IOException, URISyntaxException, ParseException {
-		List<Tweet> tweets = getTimeLine(1);
 		List<Tweet> list = new ArrayList<Tweet>();
-		for(Tweet tweet : tweets){
-			if(list.size() >= 20) break;
-			long diff = new Date().getTime() - tweet.postedTime.getTime();
-			if(diff > (min * 60 * 1000)) break;
-			list.add(tweet);
+
+		for (int page = 1 ; ; page++) {
+			List<Tweet> tweets = getTimeLine(page);
+			for(Tweet tweet : tweets){
+				if(list.size() >= 20) break;
+				long diff = new Date().getTime() - tweet.postedTime.getTime();
+				if(diff > (min * 60 * 1000)) break;
+				list.add(tweet);
+			}
+			long diff = new Date().getTime() - list.get(list.size() -1).postedTime.getTime();
+			if (list.size() >= 20 || diff > (min * 60 * 1000)) {
+				break;
+			}
 		}
 		return list;
 	}

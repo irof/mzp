@@ -138,6 +138,39 @@ public class TweetCategorizerTest {
 		}
 	}
 
+	@Test
+	public void 複数ページでとる() throws Exception {
+		TweetCategorizer tc = 複数ページ取得用();		
+		List<Tweet> list = tc.getLastTimeLine(30);
+		assertThat(list.size(), is(20));
+		assertThat(list.get(0).content, is("page1"));
+		assertThat(list.get(19).content, is("page3"));
+	}
+
+	/**
+	 * 1ページ5件返す。
+	 * 全て現在時間
+	 * @return
+	 */
+	private TweetCategorizer 複数ページ取得用() {
+		TweetCategorizer tc = new TweetCategorizer(){
+			@Override
+			public List<Tweet> getTimeLine(int page) throws MalformedURLException,
+					IOException, URISyntaxException, ParseException {
+				List<Tweet> tweets = new ArrayList<Tweet>(); 
+				long currentTime = new Date().getTime();
+				for(int i=0; i<7; i++){
+					Tweet tweet = new Tweet();
+					tweet.postedTime = new Date(currentTime);
+					tweet.content = "page" + page;
+					tweets.add(tweet);
+				}
+				return tweets;
+			}
+		};
+		return tc;
+	}
+
 	private TweetCategorizer getTestInstance(final int interval) {
 		TweetCategorizer tc = new TweetCategorizer(){
 			@Override
