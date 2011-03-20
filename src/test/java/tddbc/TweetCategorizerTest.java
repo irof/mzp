@@ -115,6 +115,7 @@ public class TweetCategorizerTest {
 
 	@Test
 	public void 三十分前に遡ってTweetを取得する() throws Exception {
+		
 	}
 	
 
