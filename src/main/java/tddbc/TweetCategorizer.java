@@ -14,7 +14,7 @@ import java.util.List;
 
 public class TweetCategorizer {
 
-	private static final String TAB = "¥t";
+	private static final String TAB = "\t";
 
 	public String categorize(String tweet) {
 		int idx = tweet.indexOf(TAB);
@@ -80,18 +80,18 @@ public class TweetCategorizer {
 		}
 	}
 
-	public List<String> getTimeLine() throws MalformedURLException, IOException, URISyntaxException {
+	public List<Tweet> getTimeLine() throws MalformedURLException, IOException, URISyntaxException, ParseException {
 		URI uri = new URI("http://192.168.1.40:4567/public_timeline");
 		URLConnection connection = uri.toURL().openConnection();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 		
-		List<String> list = new ArrayList<String>();
+		List<Tweet> list = new ArrayList<Tweet>();
 		while(true){
 			String buffer = reader.readLine();
 			if(buffer == null){
 				break;
 			}
-			list.add(buffer);
+			list.add(convert(buffer));
 		}
 		
 		return list;
