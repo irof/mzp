@@ -1,8 +1,11 @@
 package tddbc;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
+
+import java.net.HttpURLConnection;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -78,4 +81,11 @@ public class TweetCategorizerTest {
 		assertThat(result, is("Reply,HashTag¥t@tan_go238 ちょwww発表者しっかり！ #tddbc"));
 	}
 	
+	@Test
+	public void ネットワークから取ってくる() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer();
+		List<String> list = tc.getTimeLine();
+		assertThat(list, is(notNullValue()));
+		assertThat(list.size(), is(20));
+	}
 }
