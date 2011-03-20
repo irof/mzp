@@ -1,5 +1,12 @@
 package tddbc;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +71,23 @@ public class TweetCategorizer {
 		boolean match(String content) {
 			return false;
 		}
+	}
+
+	public List<String> getTimeLine() throws MalformedURLException, IOException, URISyntaxException {
+		URI uri = new URI("http://192.168.1.40:4567/public_timeline");
+		URLConnection connection = uri.toURL().openConnection();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "JISAutoDetect"));
+		
+		List<String> list = new ArrayList<String>();
+		while(true){
+			String buffer = reader.readLine();
+			if(buffer == null){
+				break;
+			}
+			list.add(buffer);
+		}
+		
+		return list;
 	}
 
 }
