@@ -86,5 +86,6 @@ public class TweetCategorizerTest {
 		TweetCategorizer tc = new TweetCategorizer();
 		List<String> list = tc.getTimeLine();
 		assertThat(list, is(notNullValue()));
+		assertThat(list.size(), is(20));
 	}
 }
