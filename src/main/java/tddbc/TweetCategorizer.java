@@ -107,4 +107,23 @@ public class TweetCategorizer {
 		t.content = tweet.substring(idx2 + TAB.length());
 		return t;
 	}
+	/**
+	 * 
+	 * @param min 
+	 * 			何分前まで取得するか
+	 * @return
+	 * @throws ParseException 
+	 * @throws URISyntaxException 
+	 * @throws IOException 
+	 * @throws MalformedURLException 
+	 */
+	public List<Tweet> getTimeLine(int min) throws MalformedURLException, IOException, URISyntaxException, ParseException {
+		List<Tweet> tweets = getTimeLine();
+		List<Tweet> list = new ArrayList<Tweet>();
+		for(Tweet tweet : tweets){
+			if(list.size() >= 20) break;
+			list.add(tweet);
+		}
+		return list;
+	}
 }

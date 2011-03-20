@@ -5,13 +5,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.internal.matchers.TypeSafeMatcher;
 
@@ -114,10 +118,25 @@ public class TweetCategorizerTest {
 	}
 
 	@Test
-	public void 三十分前に遡ってTweetを取得する() throws Exception {
-		TweetCategorizer tc = new TweetCategorizer();
-		List<Tweet> list = tc.getTimeLine();
-		
+	public void 最大２０件Tweetを取得する() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer(){
+			@Override
+			public List<Tweet> getTimeLine() throws MalformedURLException,
+					IOException, URISyntaxException, ParseException {
+				List<Tweet> tweets = new ArrayList<Tweet>(); 
+				Date currentTime = new Date();
+				for(int i=0; i<30; i++){
+					Tweet tweet = new Tweet();
+					currentTime.setTime(currentTime.getTime() - (60 * 1000));
+					tweet.postedTime = currentTime;
+					tweets.add(tweet);
+				}
+				return tweets;
+			}
+		};
+		List<Tweet> list = tc.getTimeLine(30);
+		assertThat(list, is(notNullValue()));
+		assertThat(list.size(), is(20));
 	}
 	
 
