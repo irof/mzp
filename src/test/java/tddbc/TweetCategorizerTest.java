@@ -115,6 +115,8 @@ public class TweetCategorizerTest {
 
 	@Test
 	public void 三十分前に遡ってTweetを取得する() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer();
+		List<Tweet> list = tc.getTimeLine();
 		
 	}
 	
