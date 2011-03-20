@@ -9,7 +9,6 @@ public class TweetCategorizer {
 
 	public String categorize(String tweet) {
 		int idx = tweet.indexOf(TAB);
-		String postedTime = tweet.substring(0, idx);
 		idx = tweet.indexOf(TAB, idx + 1);
 		String content = tweet.substring(idx + TAB.length());
 
