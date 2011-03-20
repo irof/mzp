@@ -3,6 +3,7 @@ package tddbc;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
@@ -119,25 +120,41 @@ public class TweetCategorizerTest {
 
 	@Test
 	public void 最大２０件Tweetを取得する() throws Exception {
+		TweetCategorizer tc = getTestInstance(1);
+		List<Tweet> list = tc.getTimeLine(30);
+		assertThat(list, is(notNullValue()));
+		assertThat(list.size(), is(20));
+	}
+
+	private TweetCategorizer getTestInstance(final int interval) {
 		TweetCategorizer tc = new TweetCategorizer(){
 			@Override
 			public List<Tweet> getTimeLine() throws MalformedURLException,
 					IOException, URISyntaxException, ParseException {
 				List<Tweet> tweets = new ArrayList<Tweet>(); 
-				Date currentTime = new Date();
+				long currentTime = new Date().getTime();
 				for(int i=0; i<30; i++){
 					Tweet tweet = new Tweet();
-					currentTime.setTime(currentTime.getTime() - (60 * 1000));
-					tweet.postedTime = currentTime;
+					currentTime -= (interval * 60 * 1000);
+					tweet.postedTime = new Date(currentTime);
 					tweets.add(tweet);
 				}
 				return tweets;
 			}
 		};
-		List<Tweet> list = tc.getTimeLine(30);
-		assertThat(list, is(notNullValue()));
-		assertThat(list.size(), is(20));
+		return tc;
 	}
+
+	@Test
+	public void 三十分越えたのTweetを取得しない() throws Exception {
+		TweetCategorizer tc = getTestInstance(2);
+		List<Tweet> list = tc.getTimeLine(30);
+		Date validDate = new Date(new Date().getTime() - (60 * 1000 * 30));
+		for(Tweet tweet : list) {
+			assertThat(tweet.postedTime.before(validDate), is(false));
+		}
+	}
+	
 	
 
 	static class DateOf extends TypeSafeMatcher<Date> {

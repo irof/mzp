@@ -10,6 +10,7 @@ import java.net.URLConnection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TweetCategorizer {
@@ -122,6 +123,8 @@ public class TweetCategorizer {
 		List<Tweet> list = new ArrayList<Tweet>();
 		for(Tweet tweet : tweets){
 			if(list.size() >= 20) break;
+			long diff = new Date().getTime() - tweet.postedTime.getTime();
+			if(diff > (min * 60 * 1000)) break;
 			list.add(tweet);
 		}
 		return list;
