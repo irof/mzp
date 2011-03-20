@@ -81,7 +81,7 @@ public class TweetCategorizer {
 		}
 	}
 
-	public List<Tweet> getTimeLine() throws MalformedURLException, IOException, URISyntaxException, ParseException {
+	public List<Tweet> getTimeLine(int page) throws MalformedURLException, IOException, URISyntaxException, ParseException {
 		URI uri = new URI("http://192.168.1.40:4567/public_timeline");
 		URLConnection connection = uri.toURL().openConnection();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
@@ -118,8 +118,8 @@ public class TweetCategorizer {
 	 * @throws IOException 
 	 * @throws MalformedURLException 
 	 */
-	public List<Tweet> getTimeLine(int min) throws MalformedURLException, IOException, URISyntaxException, ParseException {
-		List<Tweet> tweets = getTimeLine();
+	public List<Tweet> getLastTimeLine(int min) throws MalformedURLException, IOException, URISyntaxException, ParseException {
+		List<Tweet> tweets = getTimeLine(1);
 		List<Tweet> list = new ArrayList<Tweet>();
 		for(Tweet tweet : tweets){
 			if(list.size() >= 20) break;

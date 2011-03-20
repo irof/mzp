@@ -95,7 +95,7 @@ public class TweetCategorizerTest {
 	@Test
 	public void ネットワークから取ってくる() throws Exception {
 		TweetCategorizer tc = new TweetCategorizer();
-		List<Tweet> list = tc.getTimeLine();
+		List<Tweet> list = tc.getTimeLine(1);
 		assertThat(list, is(notNullValue()));
 		assertThat(list.size(), is(20));
 	}
@@ -121,7 +121,7 @@ public class TweetCategorizerTest {
 	@Test
 	public void 最大２０件Tweetを取得する() throws Exception {
 		TweetCategorizer tc = getTestInstance(1);
-		List<Tweet> list = tc.getTimeLine(30);
+		List<Tweet> list = tc.getLastTimeLine(30);
 		assertThat(list, is(notNullValue()));
 		assertThat(list.size(), is(20));
 	}
@@ -129,7 +129,7 @@ public class TweetCategorizerTest {
 	private TweetCategorizer getTestInstance(final int interval) {
 		TweetCategorizer tc = new TweetCategorizer(){
 			@Override
-			public List<Tweet> getTimeLine() throws MalformedURLException,
+			public List<Tweet> getTimeLine(int page) throws MalformedURLException,
 					IOException, URISyntaxException, ParseException {
 				List<Tweet> tweets = new ArrayList<Tweet>(); 
 				long currentTime = new Date().getTime();
@@ -148,7 +148,7 @@ public class TweetCategorizerTest {
 	@Test
 	public void 三十分越えたのTweetを取得しない() throws Exception {
 		TweetCategorizer tc = getTestInstance(2);
-		List<Tweet> list = tc.getTimeLine(30);
+		List<Tweet> list = tc.getLastTimeLine(30);
 		Date validDate = new Date(new Date().getTime() - (60 * 1000 * 30));
 		for(Tweet tweet : list) {
 			assertThat(tweet.postedTime.before(validDate), is(false));
