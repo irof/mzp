@@ -82,7 +82,7 @@ public class TweetCategorizer {
 	}
 
 	public List<Tweet> getTimeLine(int page) throws MalformedURLException, IOException, URISyntaxException, ParseException {
-		URI uri = new URI("http://192.168.1.40:4567/public_timeline");
+		URI uri = new URI("http://192.168.1.40:4567/public_timeline/" + page);
 		URLConnection connection = uri.toURL().openConnection();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
 		

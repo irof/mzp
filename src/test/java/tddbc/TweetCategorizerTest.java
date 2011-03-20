@@ -1,7 +1,7 @@
 package tddbc;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertThat;
@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.internal.matchers.TypeSafeMatcher;
 
@@ -124,6 +125,17 @@ public class TweetCategorizerTest {
 		List<Tweet> list = tc.getLastTimeLine(30);
 		assertThat(list, is(notNullValue()));
 		assertThat(list.size(), is(20));
+	}
+
+	@Test
+	public void ページング() throws Exception {
+		TweetCategorizer tc = new TweetCategorizer();
+		List<?> result1 = tc.getTimeLine(1);
+		List<?> result2 = tc.getTimeLine(2);
+
+		for (int i = 0; i < result1.size(); i++) {
+			assertThat(result1.get(0).equals(result2.get(0)), is(false));
+		}
 	}
 
 	private TweetCategorizer getTestInstance(final int interval) {
