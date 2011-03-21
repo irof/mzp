@@ -92,7 +92,8 @@ public class TweetCategorizerTest {
 				.categorize("2011/03/20 13:14:22\tbackpaper0\t@tan_go238 ちょwww発表者しっかり！ #tddbc");
 		assertThat(result, is("Reply,HashTag\t@tan_go238 ちょwww発表者しっかり！ #tddbc"));
 	}
-	
+
+	@Ignore
 	@Test
 	public void ネットワークから取ってくる() throws Exception {
 		TweetCategorizer tc = new TweetCategorizer();
@@ -127,6 +128,7 @@ public class TweetCategorizerTest {
 		assertThat(list.size(), is(20));
 	}
 
+	@Ignore
 	@Test
 	public void ページング() throws Exception {
 		TweetCategorizer tc = new TweetCategorizer();
